@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const videoController_1 = require("../controllers/videoController");
+const auth_1 = require("../middleware/auth");
+const upload_1 = require("../middleware/upload");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.post('/upload', (0, auth_1.authorize)('PE_TEACHER'), upload_1.upload.single('video'), videoController_1.uploadVideo);
+router.get('/test/:testId', (0, auth_1.authorize)('PE_TEACHER', 'SCOUT', 'ADMIN', 'STUDENT'), videoController_1.getVideosByTest);
+router.get('/:id', (0, auth_1.authorize)('PE_TEACHER', 'SCOUT', 'ADMIN', 'STUDENT'), videoController_1.getVideo);
+exports.default = router;

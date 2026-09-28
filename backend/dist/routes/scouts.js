@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const scoutController_1 = require("../controllers/scoutController");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate, (0, auth_1.authorize)('SCOUT', 'ADMIN'));
+router.get('/athletes', scoutController_1.getAthletes);
+router.get('/athletes/:id', scoutController_1.getAthleteDetail);
+router.get('/shortlist', scoutController_1.getShortlist);
+router.get('/stats', scoutController_1.getScoutStats);
+router.post('/shortlist', scoutController_1.shortlistAthlete);
+router.put('/shortlist/:id', scoutController_1.updateShortlist);
+router.delete('/shortlist/:id', scoutController_1.deleteShortlist);
+exports.default = router;

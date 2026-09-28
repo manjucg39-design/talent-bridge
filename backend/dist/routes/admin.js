@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const adminController_1 = require("../controllers/adminController");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate, (0, auth_1.authorize)('ADMIN'));
+router.get('/stats', adminController_1.getStats);
+router.get('/users', adminController_1.getAllUsers);
+router.get('/pending-verifications', adminController_1.getPendingVerifications);
+router.put('/verify/:id', adminController_1.verifyEntity);
+router.put('/reject/:id', adminController_1.rejectEntity);
+router.put('/users/:id/status', adminController_1.setUserActive);
+exports.default = router;

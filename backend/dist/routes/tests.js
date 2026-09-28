@@ -1,0 +1,14 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const testController_1 = require("../controllers/testController");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.use(auth_1.authenticate);
+router.post('/', (0, auth_1.authorize)('PE_TEACHER'), testController_1.createTest);
+router.put('/:id', (0, auth_1.authorize)('PE_TEACHER'), testController_1.updateTest);
+router.delete('/:id', (0, auth_1.authorize)('PE_TEACHER'), testController_1.deleteTest);
+router.get('/my-students', (0, auth_1.authorize)('PE_TEACHER'), testController_1.getMyStudents);
+router.get('/teacher-stats', (0, auth_1.authorize)('PE_TEACHER'), testController_1.getTeacherStats);
+router.get('/:studentId', (0, auth_1.authorize)('PE_TEACHER', 'SCOUT', 'ADMIN', 'STUDENT'), testController_1.getTestsByStudent);
+exports.default = router;

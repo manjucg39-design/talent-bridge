@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7
+    container_name: rtn-mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    container_name: rtn-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/rural-talent-network
+      - JWT_SECRET=change_in_production
+      - JWT_REFRESH_SECRET=change_in_production_refresh
+      - CLIENT_URL=http://localhost:5173
+      - NODE_ENV=development
+      - DEMO_PASSWORD=Demo@123456
+    volumes:
+      - ./uploads:/app/uploads
+    depends_on:
+      - mongodb
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    container_name: rtn-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  ai-service:
+    build: ./ai-service
+    container_name: rtn-ai-service
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+volumes:
+  mongo_data:

@@ -1,0 +1,12 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const clubController_1 = require("../controllers/clubController");
+const auth_1 = require("../middleware/auth");
+const router = (0, express_1.Router)();
+router.get('/', clubController_1.getClubs);
+router.get('/dashboard', auth_1.authenticate, (0, auth_1.authorize)('CLUB', 'ADMIN'), clubController_1.getClubDashboard);
+router.post('/training', auth_1.authenticate, (0, auth_1.authorize)('CLUB', 'ADMIN'), clubController_1.createTrainingRecord);
+router.get('/:id', clubController_1.getClubById);
+router.post('/', auth_1.authenticate, (0, auth_1.authorize)('CLUB', 'ADMIN'), clubController_1.createClub);
+exports.default = router;
